@@ -1,0 +1,33 @@
+/**
+ * JSGF Grammar for the MoteNav application
+ */
+
+grammar locations;
+
+/** Grammar for the recognized locations. A location recognized by SpeechProcessor is
+ *  then searched within bookmark list names.
+ *  You may extend recognized locations adding rows here (e.g. 'fly to <your_preferred_location_name> | )
+ */
+
+public <locations> =  fly to europe | 
+                      fly to asia |
+                      fly to australia | 
+                      fly to america |
+                      fly to africa |
+                      fly to genoa ;
+
+/** Digits based bookmarks: bookmarks named 'zero', 'one', 'two' ... in bookmark
+ *  panel are recognized by SpeechProcessor
+ */
+
+public <bookmarks> = fly to book mark <digits> ;
+
+<digits> = zero | one | two | three | four | five | six | seven | eight | nine ;
+
+/** Commands for exiting, grabbing the current position
+ */
+
+public <commands> = take book mark |
+                    grab position |
+                    application exit { exit } ;
+
