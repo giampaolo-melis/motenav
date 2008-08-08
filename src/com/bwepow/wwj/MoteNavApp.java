@@ -102,17 +102,6 @@ public class MoteNavApp extends ApplicationTemplate {
 
                 public void propertyChange(PropertyChangeEvent evt) {
                     JobScheduler.scheduleUpdateCoord(AppFrame.this, 650);
-                // System.out.println(evt.getPropertyName());
-                    /*if (AVKey.VIEW_QUIET.equals(evt.getPropertyName())) {
-                System.err.println("View Quiet");
-                SwingUtilities.invokeLater(new Runnable() {
-                
-                public void run() {
-                AppFrame.this.update();
-                }
-                });
-                
-                }*/
                 }
             });
 
@@ -135,21 +124,15 @@ public class MoteNavApp extends ApplicationTemplate {
 
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Pressed MC button");
-                    Thread t = new Thread("Mote-Connector") {
-
-                        @Override
-                        public void run() {
-                            AppFrame.this.connect();
-                        }
-                    };
-                    t.setPriority(Thread.MIN_PRIORITY);
+                    AppFrame.this.connect();
                     AppFrame.this.bookmarkPanel.getMcButton().setEnabled(false);
-                    t.start();
                 }
             });
-        //this.connect();
 
-        //startRecognize();
+            //TODO Add jump to coordinate panel
+
+            //TODO Extends bookmark data with pitch and heading
+
         // Add go to coordinate input panel
         //this.getLayerPanel().add(new GoToCoordinatePanel(this.getWwd()), BorderLayout.SOUTH);
         }
