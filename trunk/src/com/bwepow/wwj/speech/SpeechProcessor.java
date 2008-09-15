@@ -84,9 +84,14 @@ public class SpeechProcessor {
     public SpeechProcessor() throws 
             IOException, PropertyException, InstantiationException {
 
-        URL url = SpeechProcessor.class.getResource("jsgf.config.xml");
+        final String configResource = "jsgf.config.xml";
+        ClassLoader loader = this.getClass().getClassLoader();
+        
+        URL url = loader.getResource(configResource);
         if (url == null)
-            url = ClassLoader.getSystemResource("jsgf.config.xml");
+            url = ClassLoader.getSystemResource(configResource);
+
+        System.out.println("Loading config file: " + url);
         
         ConfigurationManager cm = new ConfigurationManager(url);
 
