@@ -66,4 +66,15 @@
     nbproject/build-impl.xml file. 
 
     -->
+    
+    <target name="-post-jar">
+        <copy todir="${dist.dir}">
+            <fileset dir="${basedir}">
+                <include name="*.dll"/>
+                <include name="*.so"/>
+                <include name="*.jnilib"/>
+            </fileset>
+        </copy>
+    </target>
+
 </project>
