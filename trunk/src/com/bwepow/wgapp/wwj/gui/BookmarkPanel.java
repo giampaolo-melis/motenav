@@ -91,6 +91,9 @@ public class BookmarkPanel extends javax.swing.JPanel {
         pos.setLatitude(currentPositionBean.getLatitude());
         pos.setLongitude(currentPositionBean.getLongitude());
         pos.setAltitude(currentPositionBean.getAltitude());
+        pos.setPitch(currentPositionBean.getPitch());
+        pos.setHeading(currentPositionBean.getHeading());
+        pos.setZoom(currentPositionBean.getZoom());
     }
 
     private void removeBookmark() {
@@ -143,20 +146,24 @@ public class BookmarkPanel extends javax.swing.JPanel {
         srButton = new javax.swing.JButton();
         mcButton = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
-        latitudeLabel = new javax.swing.JLabel();
-        longitudeLabel = new javax.swing.JLabel();
-        altitudeLabel = new javax.swing.JLabel();
-        latitudeText = new javax.swing.JTextField();
-        longitudeText = new javax.swing.JTextField();
-        altitudeText = new javax.swing.JTextField();
         tableTitleLabel = new javax.swing.JLabel();
         tableScrollPane = new javax.swing.JScrollPane();
         bookmarksTable = new javax.swing.JTable();
         grabButton = new javax.swing.JButton();
-        bookmarkNameText = new javax.swing.JTextField();
         bookmarkNameLabel = new javax.swing.JLabel();
+        bookmarkNameText = new javax.swing.JTextField();
         removeButton = new javax.swing.JButton();
         flyToButton = new javax.swing.JButton();
+        LatLonLabel = new javax.swing.JLabel();
+        altitudeLabel = new javax.swing.JLabel();
+        pitchHeadingLabel = new javax.swing.JLabel();
+        zoomLabel = new javax.swing.JLabel();
+        latitudeText = new javax.swing.JFormattedTextField();
+        longitudeText = new javax.swing.JFormattedTextField();
+        altitudeText = new javax.swing.JFormattedTextField();
+        pitchText = new javax.swing.JFormattedTextField();
+        headingText = new javax.swing.JFormattedTextField();
+        zoomText = new javax.swing.JFormattedTextField();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -170,9 +177,12 @@ public class BookmarkPanel extends javax.swing.JPanel {
             }
         });
 
+        srButton.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
         srButton.setText("SR");
         srButton.setToolTipText("Start speech recognition");
+        srButton.setMaximumSize(new java.awt.Dimension(38, 19));
 
+        mcButton.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
         mcButton.setText("MC");
         mcButton.setToolTipText("Start wiimote connection");
 
@@ -183,10 +193,10 @@ public class BookmarkPanel extends javax.swing.JPanel {
             .addGroup(featuresPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(networkCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addComponent(mcButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addComponent(mcButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(srButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(srButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -197,7 +207,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
             .addGroup(featuresPanelLayout.createSequentialGroup()
                 .addGroup(featuresPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(networkCheckBox)
-                    .addComponent(srButton)
+                    .addComponent(srButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(mcButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -205,33 +215,6 @@ public class BookmarkPanel extends javax.swing.JPanel {
         add(featuresPanel, java.awt.BorderLayout.NORTH);
 
         mainPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(8, 8, 8, 8), javax.swing.BorderFactory.createTitledBorder("Bookmarks")));
-
-        latitudeLabel.setText("Latitude");
-
-        longitudeLabel.setText("Longitude");
-
-        altitudeLabel.setText("Altitude");
-
-        latitudeText.setEditable(false);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${latitude}"), latitudeText, org.jdesktop.beansbinding.BeanProperty.create("text"), "latBinding");
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
-        bindingGroup.addBinding(binding);
-
-        longitudeText.setEditable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${longitude}"), longitudeText, org.jdesktop.beansbinding.BeanProperty.create("text"), "lonBinding");
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
-        bindingGroup.addBinding(binding);
-
-        altitudeText.setEditable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${altitude}"), altitudeText, org.jdesktop.beansbinding.BeanProperty.create("text"), "altBinding");
-        binding.setSourceNullValue("");
-        binding.setSourceUnreadableValue("");
-        bindingGroup.addBinding(binding);
 
         tableTitleLabel.setText("Saved");
 
@@ -262,7 +245,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
         columnBinding.setColumnName("Altitude");
         columnBinding.setColumnClass(Double.class);
         bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${selectedBookmark}"), bookmarksTable, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        jTableBinding.bind();org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${selectedBookmark}"), bookmarksTable, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
         tableScrollPane.setViewportView(bookmarksTable);
@@ -274,12 +257,12 @@ public class BookmarkPanel extends javax.swing.JPanel {
             }
         });
 
+        bookmarkNameLabel.setText("Name");
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${bookmarkName}"), bookmarkNameText, org.jdesktop.beansbinding.BeanProperty.create("text"), "bkNameBind");
         binding.setSourceNullValue("Unnamed");
         binding.setSourceUnreadableValue("Unnamed");
         bindingGroup.addBinding(binding);
-
-        bookmarkNameLabel.setText("Name");
 
         removeButton.setText("Remove");
 
@@ -294,60 +277,121 @@ public class BookmarkPanel extends javax.swing.JPanel {
 
         flyToButton.setText("Fly To");
 
+        LatLonLabel.setText("Lat / Lon");
+        LatLonLabel.setToolTipText("Latitude / Longitude");
+
+        altitudeLabel.setText("Altitude");
+
+        pitchHeadingLabel.setText("Pitch / Head");
+        pitchHeadingLabel.setToolTipText("Pitch / Heading");
+
+        zoomLabel.setText("Zoom");
+        zoomLabel.setToolTipText("Pitch / Heading");
+
+        latitudeText.setEditable(false);
+        latitudeText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.0000000"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${latitude}"), latitudeText, org.jdesktop.beansbinding.BeanProperty.create("value"), "latitudeBinding");
+        bindingGroup.addBinding(binding);
+
+        longitudeText.setEditable(false);
+        longitudeText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.0000000"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${longitude}"), longitudeText, org.jdesktop.beansbinding.BeanProperty.create("value"), "longitudeBinding");
+        bindingGroup.addBinding(binding);
+
+        altitudeText.setEditable(false);
+        altitudeText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.000000000000"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${altitude}"), altitudeText, org.jdesktop.beansbinding.BeanProperty.create("value"), "altitudeBinding");
+        bindingGroup.addBinding(binding);
+
+        pitchText.setEditable(false);
+        pitchText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.0000000"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${pitch}"), pitchText, org.jdesktop.beansbinding.BeanProperty.create("value"), "pitchBinding");
+        bindingGroup.addBinding(binding);
+
+        headingText.setEditable(false);
+        headingText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.0000000"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${heading}"), headingText, org.jdesktop.beansbinding.BeanProperty.create("value"), "headingBinding");
+        bindingGroup.addBinding(binding);
+
+        zoomText.setEditable(false);
+        zoomText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.000000000000"))));
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, currentPositionBean, org.jdesktop.beansbinding.ELProperty.create("${zoom}"), zoomText, org.jdesktop.beansbinding.BeanProperty.create("value"), "zoomBinding");
+        bindingGroup.addBinding(binding);
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(tableTitleLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 146, Short.MAX_VALUE)
-                        .addComponent(grabButton))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(latitudeLabel)
-                            .addComponent(longitudeLabel)
-                            .addComponent(altitudeLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(altitudeText, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                            .addComponent(latitudeText, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                            .addComponent(longitudeText, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)))
-                    .addComponent(tableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
-                    .addComponent(removeButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tableScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                    .addComponent(removeButton)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createSequentialGroup()
                         .addComponent(flyToButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(bookmarkNameLabel)
-                            .addComponent(bookmarkNameText, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))))
+                            .addComponent(bookmarkNameText, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(tableTitleLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
+                        .addComponent(grabButton))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LatLonLabel)
+                            .addComponent(altitudeLabel)
+                            .addComponent(pitchHeadingLabel)
+                            .addComponent(zoomLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(zoomText)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(pitchText)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(headingText, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(altitudeText)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(latitudeText, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(longitudeText, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
+
+        mainPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {latitudeText, longitudeText});
+
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(latitudeLabel)
+                    .addComponent(LatLonLabel)
+                    .addComponent(longitudeText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(latitudeText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(longitudeLabel)
-                    .addComponent(longitudeText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(altitudeLabel)
                     .addComponent(altitudeText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(tableTitleLabel))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(grabButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pitchHeadingLabel)
+                    .addComponent(headingText, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pitchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(zoomLabel)
+                    .addComponent(zoomText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(grabButton)
+                    .addComponent(tableTitleLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(removeButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -383,8 +427,9 @@ private void networkCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//G
     private ObservableList<PositionBean> bookmarks = ObservableCollections.observableList(StaticData.getBOOKMARKS());
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel LatLonLabel;
     private javax.swing.JLabel altitudeLabel;
-    private javax.swing.JTextField altitudeText;
+    private javax.swing.JFormattedTextField altitudeText;
     private javax.swing.JLabel bookmarkNameLabel;
     private javax.swing.JTextField bookmarkNameText;
     private javax.swing.JTable bookmarksTable;
@@ -392,17 +437,20 @@ private void networkCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//G
     private javax.swing.JPanel featuresPanel;
     private javax.swing.JButton flyToButton;
     private javax.swing.JButton grabButton;
-    private javax.swing.JLabel latitudeLabel;
-    private javax.swing.JTextField latitudeText;
-    private javax.swing.JLabel longitudeLabel;
-    private javax.swing.JTextField longitudeText;
+    private javax.swing.JFormattedTextField headingText;
+    private javax.swing.JFormattedTextField latitudeText;
+    private javax.swing.JFormattedTextField longitudeText;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton mcButton;
     private javax.swing.JCheckBox networkCheckBox;
+    private javax.swing.JLabel pitchHeadingLabel;
+    private javax.swing.JFormattedTextField pitchText;
     private javax.swing.JButton removeButton;
     private javax.swing.JButton srButton;
     private javax.swing.JScrollPane tableScrollPane;
     private javax.swing.JLabel tableTitleLabel;
+    private javax.swing.JLabel zoomLabel;
+    private javax.swing.JFormattedTextField zoomText;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
