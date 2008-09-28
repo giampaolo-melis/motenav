@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jnlp codebase="http://motenav.googlecode.com/files/" href="launch.jnlp" spec="1.0+">
+    <information>
+        <title>MoteNav</title>
+        <vendor>Giampaolo Melis</vendor>
+        <homepage href="http://motenav.googlecode.com/"/>
+        <description>WWJ Multimodal Interface</description>
+        <description kind="short">MoteNav</description>
+		<offline-allowed/>
+	</information>
+	<security>
+		<all-permissions/>
+	</security>
+    <resources>
+		<j2se java-vm-args="-Xmx320m -Dsun.java2d.noddraw=true -Dworldwind.cache=/userdata" version="1.5+"/>
+		<jar eager="true" href="MoteNav.jar" main="true"/>
+		<jar href="beansbinding-1.2.1.jar"/>
+		<jar href="bluecove-2.0.2.jar"/>
+		<jar href="WiiRemoteJ.jar"/>
+		<jar href="worldwind.jar"/>
+		<jar href="js.jar"/>
+		<jar href="jsapi.jar"/>
+		<jar href="sphinx4.jar"/>
+		<jar href="tags.jar"/>
+		<jar href="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>
+		<jar href="substance.jar"/>
+		<extension href="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp" name="jogl" version=""/>
+	</resources>
+    <application-desc main-class="com.bwepow.wwj.MoteNavApp">
+
+    </application-desc>
+</jnlp>

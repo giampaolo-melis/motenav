@@ -46,6 +46,8 @@ import gov.nasa.worldwind.view.EyePositionIterator;
 import gov.nasa.worldwind.ViewStateIterator;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.examples.ApplicationTemplate;
+import gov.nasa.worldwind.globes.Globe;
+import gov.nasa.worldwind.view.FlyToOrbitViewStateIterator;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -138,8 +140,7 @@ public class MoteNavApp extends ApplicationTemplate {
         }
 
         void flyToBookmark() {
-            PositionBean pos = bookmarkPanel.getSelectedBookmark();
-            flyToBookmark(pos);
+            flyToBookmark(true);
         }
 
         void flyToBookmark(PositionBean pos) {
@@ -157,6 +158,52 @@ public class MoteNavApp extends ApplicationTemplate {
             getWwd().getView().applyStateIterator(vsi);
         }
 
+        void flyToBookmark(boolean smooth) {
+            PositionBean pos = bookmarkPanel.getSelectedBookmark();
+            flyToBookmark(pos, smooth);
+        }
+
+        void flyToBookmark(PositionBean pos, boolean smooth) {
+            System.out.println("POS: " + pos);
+            if (pos == null) {
+                return;
+            }
+
+            Angle lat = Angle.fromDegrees(pos.getLatitude());
+            Angle lon = Angle.fromDegrees(pos.getLongitude());
+            double alt = pos.getAltitude();
+            Angle pitch = Angle.fromDegrees(pos.getPitch());
+            Angle heading = Angle.fromDegrees(pos.getHeading());
+            double zoom = pos.getZoom();
+
+            OrbitView view = (OrbitView) getWwd().getView();
+
+            Position start = view.getCenterPosition();
+            Position end = new Position(lat, lon, alt);
+
+            Angle startHeading = view.getHeading();
+            Angle startPitch = view.getPitch();
+            double startZoom = view.getZoom();
+
+            if (smooth) {
+                Globe globe = getWwd().getModel().getGlobe();
+
+                ViewStateIterator vsi = FlyToOrbitViewStateIterator.createPanToIterator(
+                        globe,
+                        start, end,
+                        startHeading, heading, startPitch, pitch,
+                        startZoom, zoom, 5500l);
+
+                getWwd().getView().applyStateIterator(vsi);
+            } else {
+                view.setCenterPosition(end);
+                view.setHeading(heading);
+                view.setPitch(pitch);
+                view.setZoom(zoom);
+                repaint();
+            }
+        }
+        
         private void startRecognize() {
             System.out.println("Starting recognizer...");
             RecognizerThread rt = new RecognizerThread(bookmarkPanel);
@@ -164,13 +211,16 @@ public class MoteNavApp extends ApplicationTemplate {
             bookmarkPanel.getSrButton().setEnabled(false);
         }
 
-        void update() {
+        void updateBookmark() {
             OrbitView view = (OrbitView) getWwd().getView();
-            Position pos = view.getEyePosition();
+            Position pos = view.getCenterPosition();
             PositionBean cpb = bookmarkPanel.getCurrentPositionBean();
             cpb.setLatitude(pos.getLatitude().getDegrees());
             cpb.setLongitude(pos.getLongitude().getDegrees());
             cpb.setAltitude(pos.getElevation());
+            cpb.setHeading(view.getHeading().getDegrees());
+            cpb.setPitch(view.getPitch().getDegrees());
+            cpb.setZoom(view.getZoom());
         }
 
         private void setupLayers() {
@@ -243,6 +293,7 @@ public class MoteNavApp extends ApplicationTemplate {
         }
         Runtime.getRuntime().addShutdownHook(new SaveBookmarks());
         WorldWind.getNetworkStatus().setOfflineMode(true);
+        System.out.println("Starting MoteNav...");
         ApplicationTemplate.start("JUG Genova Demo Application (MoteSpots)", AppFrame.class);
     }
 
@@ -280,7 +331,7 @@ public class MoteNavApp extends ApplicationTemplate {
         }
         
         public void run() {
-            frame.update();
+            frame.updateBookmark();
         }
     }
 }
